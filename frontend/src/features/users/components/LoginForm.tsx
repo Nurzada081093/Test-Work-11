@@ -39,6 +39,7 @@ const LoginForm = () => {
     e.preventDefault();
     await dispatch(userLogin({...loginForm})).unwrap();
     navigate('/');
+    setLoginForm(initialState);
   }
 
   return (

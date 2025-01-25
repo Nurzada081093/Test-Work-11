@@ -33,3 +33,18 @@ export interface ValidationError {
 export interface GlobalError {
   error: string;
 }
+
+export interface IProduct {
+  _id: string;
+  user: string;
+  category: string;
+  title: string;
+  description: string;
+  price: number;
+  image: string;
+}
+
+export interface ICategory {
+  _id: string;
+  title: string;
+}

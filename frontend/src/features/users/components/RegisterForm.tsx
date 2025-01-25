@@ -41,6 +41,7 @@ const RegisterForm: React.FC<Props> = ({register}) => {
   const submitUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     register({...registerForm});
+    setRegisterForm(initialUserState);
   };
 
   const getError = (fieldName: string) => {

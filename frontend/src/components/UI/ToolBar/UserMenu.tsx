@@ -25,8 +25,8 @@ const UserMenu = () => {
   };
 
   return (
-    <Box sx={{display: 'flex', width: '300px', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px'}}>
-      <Button color='inherit' variant="text" to={'/trackHistory'} component={NavLink} sx={{fontSize: '16px'}}>Track history</Button>
+    <Box sx={{display: 'flex', width: '250px', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px'}}>
+      <Button color='inherit' variant="text" to={'/products/addNewProduct'} component={NavLink} sx={{fontSize: '16px'}}>Add new product</Button>
       <Button color='inherit' onClick={handleClick}>
         <AccountCircle fontSize="large"/>
       </Button>
@@ -36,8 +36,6 @@ const UserMenu = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>My account</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </Box>

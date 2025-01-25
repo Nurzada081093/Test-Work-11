@@ -16,9 +16,9 @@ const ToolBar = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{backgroundColor: 'rgba(0,0,0,0.79)'}}>
+      <AppBar position="static" sx={{backgroundColor: 'rgba(71,70,70,0.25)'}}>
         <Container>
-          <Toolbar sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
+          <Toolbar sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', padding: '20px 0'}}>
             <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
               <IconButton
                 size="large"
@@ -33,7 +33,15 @@ const ToolBar = () => {
                 Candy Shop
               </Typography>
             </Box>
-            {user ? <UserMenu/> : <AnonymousUserMenu/>}
+            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
+              <Box>
+                {user && <Typography sx={{fontSize: '20px', textTransform: 'uppercase', marginTop: '18px', marginRight: '10px'}}>Hello, <b>{user?.username}!</b></Typography>}
+              </Box>
+              <Box>
+                {user ? <UserMenu/> : <AnonymousUserMenu/>}
+              </Box>
+            </Box>
+
           </Toolbar>
         </Container>
       </AppBar>
