@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IProduct } from '../../types';
-import { getAllProducts, getProductsByCategory } from './productsThunk.ts';
+import { GlobalError, IProduct, IProductMutation } from '../../types';
+import { createProduct, deleteProduct, getAllProducts, getOneProduct, getProductsByCategory } from './productsThunk.ts';
 import { RootState } from '../../app/store.ts';
 
 interface InitialProductSlice {
   products: IProduct[];
-  product: IProduct | null;
+  product: IProductMutation | null;
   loadings: {
     addProductLoading: boolean;
     getProductsLoading: boolean;
@@ -13,6 +13,7 @@ interface InitialProductSlice {
     deleteProductLoading: boolean;
   },
   error: boolean;
+  deleteError: GlobalError | null,
 }
 
 const initialState: InitialProductSlice = {
@@ -25,10 +26,13 @@ const initialState: InitialProductSlice = {
     deleteProductLoading: false,
   },
   error: false,
+  deleteError: null,
 };
 
 export const productsFromSlice = (state: RootState) => state.products.products;
+export const productFromSlice = (state: RootState) => state.products.product;
 export const getProductsLoadingFromSlice = (state: RootState) => state.products.loadings.getProductsLoading;
+export const deleteErrorFromSlice = (state: RootState) => state.products.deleteError;
 
 const productsSlice = createSlice({
   name: 'products',
@@ -65,9 +69,46 @@ const productsSlice = createSlice({
       .addCase(getProductsByCategory.rejected, (state) => {
         state.loadings.getProductsLoading = false;
         state.error = true;
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.loadings.deleteProductLoading = true;
+        state.deleteError = null;
+      })
+      .addCase(deleteProduct.fulfilled, (state) => {
+        state.loadings.deleteProductLoading = false;
+        state.deleteError = null;
+      })
+      .addCase(deleteProduct.rejected, (state, {payload: error}) => {
+        state.loadings.deleteProductLoading = false;
+        state.deleteError = error || null;
+      })
+      .addCase(getOneProduct.pending, (state) => {
+        state.loadings.getOneProductLoading = true;
+        state.error = false;
+      })
+      .addCase(getOneProduct.fulfilled, (state, {payload: product}) => {
+        state.product = null;
+        state.loadings.getOneProductLoading = false;
+        state.error = false;
+        state.product = product;
+      })
+      .addCase(getOneProduct.rejected, (state) => {
+        state.loadings.getOneProductLoading = false;
+        state.error = true;
+      })
+      .addCase(createProduct.pending, (state) => {
+        state.loadings.addProductLoading = true;
+        state.error = false;
+      })
+      .addCase(createProduct.fulfilled, (state) => {
+        state.loadings.addProductLoading = false;
+        state.error = false;
+      })
+      .addCase(createProduct.rejected, (state) => {
+        state.loadings.addProductLoading = false;
+        state.error = true;
       });
   }
-
 });
 
 export const productsReducer = productsSlice.reducer;

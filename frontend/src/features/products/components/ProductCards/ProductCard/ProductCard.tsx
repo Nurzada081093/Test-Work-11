@@ -1,27 +1,21 @@
 import AspectRatio from '@mui/joy/AspectRatio';
-import Button from '@mui/joy/Button';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import Typography from '@mui/joy/Typography';
 import { IProduct } from '../../../../../types';
 import React from 'react';
 import { mainApiUrl } from '../../../../../globalConstants.ts';
-import { useAppSelector } from '../../../../../app/hooks.ts';
-import { userFromSlice } from '../../../../users/usersSlice.ts';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   product: IProduct;
 }
 
 const ProductCard:React.FC<Props> = ({product}) => {
-  const user = useAppSelector(userFromSlice);
-
-  const deleteThisProduct = (id: string) => {
-    console.log(id);
-  };
+  const navigate = useNavigate();
 
   return (
-    <Card sx={{ width: 230, height: 320, margin: '0 10px 20px 10px' }}>
+    <Card sx={{ width: 230, height: 320, margin: '0 10px 20px 10px' }} onClick={() => navigate(`/products/${product._id}`)}>
       <div>
         <Typography level="title-lg">{product.title}</Typography>
       </div>
@@ -38,18 +32,6 @@ const ProductCard:React.FC<Props> = ({product}) => {
           <Typography level="body-xs">Total price:</Typography>
           <Typography sx={{ fontSize: 'lg', fontWeight: 'lg' }}>{product.price} KGZ</Typography>
         </div>
-        {user ?
-          <Button
-            variant="solid"
-            size="md"
-            color="primary"
-            aria-label="Explore Bahamas Islands"
-            sx={{ ml: 'auto', alignSelf: 'center', fontWeight: 600 }}
-            onClick={() => deleteThisProduct(product._id)}
-          >
-            Sold
-          </Button> : null
-        }
       </CardContent>
     </Card>
   );

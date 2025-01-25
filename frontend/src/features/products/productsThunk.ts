@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosRequest from '../../axiosRequest.ts';
-import { IProduct } from '../../types';
+import { GlobalError, IProduct, IProductMutation } from '../../types';
+import { isAxiosError } from 'axios';
 
 export const getAllProducts= createAsyncThunk<IProduct[], void>(
   'products/getAllProducts',
@@ -15,5 +16,45 @@ export const getProductsByCategory= createAsyncThunk<IProduct[], string>(
   async (id) => {
     const response = await axiosRequest<IProduct[]>(`/products?category=${id}`);
     return response.data;
+  }
+);
+
+export const getOneProduct= createAsyncThunk<IProductMutation, string>(
+  'products/getOneProduct',
+  async (id) => {
+    const response = await axiosRequest<IProductMutation>(`/products/${id}`);
+    return response.data;
+  }
+);
+
+export const deleteProduct = createAsyncThunk<void, {id: string, token: string }, {rejectValue: GlobalError}>(
+  'products/deleteProduct',
+  async ({id, token}, {rejectWithValue}) => {
+    try {
+      await axiosRequest.delete(`/products/${id}`, {headers: {'Authorization': token}});
+    } catch (error) {
+      if (isAxiosError(error) && error.response && error.response.status === 403) {
+        return rejectWithValue(error.response.data as GlobalError);
+      }
+
+      throw error;
+    }
+  }
+);
+
+export const createProduct = createAsyncThunk<void, { product: IProduct, token: string }>(
+  'products/createProduct',
+  async ({product, token}) => {
+    const formData = new FormData();
+    const keys = Object.keys(product) as (keyof IProduct)[];
+
+    keys.forEach((key) => {
+      const value = product[key];
+
+      if (value !== null) {
+        formData.append(key, String(value));
+      }
+    });
+    await axiosRequest.post('/products', formData, {headers: {'Authorization': token}});
   }
 );

@@ -35,16 +35,34 @@ export interface GlobalError {
 }
 
 export interface IProduct {
-  _id: string;
-  user: string;
+  _id?: string;
+  user?: string;
   category: string;
+  title: string;
+  description: string;
+  price: number;
+  image: File | string;
+}
+
+export interface ICategory {
+  _id: string;
+  title: string;
+}
+
+export interface IProductMutation {
+  _id: string;
+  user: IUser;
+  category: ICategory;
   title: string;
   description: string;
   price: number;
   image: string;
 }
 
-export interface ICategory {
-  _id: string;
+export interface IProductForm {
+  category: string;
   title: string;
+  description: string;
+  price: number;
+  image: File | null;
 }
