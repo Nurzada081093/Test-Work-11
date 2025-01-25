@@ -1,9 +1,17 @@
 import ProductCard from './ProductCard/ProductCard.tsx';
+import { IProduct } from '../../../../types';
+import React from 'react';
 
-const ProductCards = () => {
+interface Props {
+  products: IProduct[];
+}
+
+const ProductCards:React.FC<Props> = ({products}) => {
   return (
     <>
-      <ProductCard/>
+      {products.map((product) => (
+        <ProductCard key={product._id} product={product} />
+      ))}
     </>
   );
 };
