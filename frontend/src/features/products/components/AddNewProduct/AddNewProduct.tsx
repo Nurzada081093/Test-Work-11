@@ -73,6 +73,7 @@ const AddNewProduct:React.FC<Props> = ({onSubmitProduct}) => {
           <FormControl sx={{width: '100%'}}>
             <InputLabel id="demo-multiple-name-label">Category</InputLabel>
             <Select
+              required
               labelId="demo-multiple-name-label"
               id="demo-multiple-name"
               variant="outlined"
@@ -94,6 +95,7 @@ const AddNewProduct:React.FC<Props> = ({onSubmitProduct}) => {
         </Grid>
         <Grid size={12}>
           <TextField
+            required
             sx={{width: '100%'}}
             id="outlined-basic"
             label="Title"
@@ -105,6 +107,7 @@ const AddNewProduct:React.FC<Props> = ({onSubmitProduct}) => {
         </Grid>
         <Grid size={12}>
           <Textarea
+            required
             id="outlined-basic"
             variant="outlined"
             placeholder="Description..."
@@ -116,6 +119,7 @@ const AddNewProduct:React.FC<Props> = ({onSubmitProduct}) => {
         </Grid>
         <Grid size={12}>
           <TextField
+            required
             sx={{width: '100%', marginBottom: '10px'}}
             id="outlined-basic"
             label="Prise"
