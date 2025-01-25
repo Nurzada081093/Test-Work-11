@@ -9,23 +9,29 @@ import React, { useEffect, useState } from 'react';
 import { getCategories } from '../../../categories/categoriesThunk.ts';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks.ts';
 import { categoriesFromSlice } from '../../../categories/categoriesSlice.ts';
-import { ICategory, IProduct } from '../../../../types';
+import { ICategory, IProductForm } from '../../../../types';
 import FileInput from '../../../../components/FileInput/FileInput.tsx';
+import { userFromSlice } from '../../../users/usersSlice.ts';
+import { useNavigate } from 'react-router-dom';
+import { createProduct } from '../../productsThunk.ts';
+import { addProductLoadingFromSlice } from '../../productsSlice.ts';
+import ButtonSpinner from '../../../../components/UI/ButtonSpinner/ButtonSpinner.tsx';
+import { toast } from 'react-toastify';
 
-export interface Props {
-  onSubmitProduct: (product: IProduct) => void;
-}
-
-const AddNewProduct:React.FC<Props> = ({onSubmitProduct}) => {
-  const [newProduct, setNewProduct] = useState<IProduct>({
+const AddNewProduct = () => {
+  const user = useAppSelector(userFromSlice);
+  const [newProduct, setNewProduct] = useState<IProductForm>({
     category: '',
     title: '',
     description: '',
     price: 0,
-    image: '',
+    image: null,
   });
+
   const dispatch = useAppDispatch();
   const categories = useAppSelector(categoriesFromSlice);
+  const loading = useAppSelector(addProductLoadingFromSlice);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getCategories());
@@ -42,8 +48,16 @@ const AddNewProduct:React.FC<Props> = ({onSubmitProduct}) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmitProduct({...newProduct});
-  }
+
+    if (newProduct.title.trim().length === 0 || newProduct.description.trim().length === 0 || newProduct.price <= 0 || newProduct.image === null || newProduct.image.length === 0) {
+      toast.error('Fill in all fields, price must be more than 0');
+    } else {
+      if (user) {
+        dispatch(createProduct({product: newProduct, token: user.token}));
+      }
+      navigate('/')
+    }
+  };
 
   const fileEventChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
@@ -85,7 +99,7 @@ const AddNewProduct:React.FC<Props> = ({onSubmitProduct}) => {
               {categories.map((category: ICategory) => (
                 <MenuItem
                   key={category._id}
-                  value={category.title}
+                  value={category._id}
                 >
                   {category.title}
                 </MenuItem>
@@ -137,8 +151,9 @@ const AddNewProduct:React.FC<Props> = ({onSubmitProduct}) => {
             />
           </Grid>
           <Grid size={12}>
-            <Button sx={{width: '100%', mt: 1}} variant="contained" type="submit">
-              create
+            <Button disabled={loading} sx={{width: '100%', mt: 1}} variant="contained" type="submit">
+              Create
+              {loading ? <ButtonSpinner/> : null}
             </Button>
           </Grid>
         </Grid>

@@ -32,6 +32,7 @@ const initialState: InitialProductSlice = {
 export const productsFromSlice = (state: RootState) => state.products.products;
 export const productFromSlice = (state: RootState) => state.products.product;
 export const getProductsLoadingFromSlice = (state: RootState) => state.products.loadings.getProductsLoading;
+export const addProductLoadingFromSlice = (state: RootState) => state.products.loadings.addProductLoading;
 export const deleteErrorFromSlice = (state: RootState) => state.products.deleteError;
 
 const productsSlice = createSlice({

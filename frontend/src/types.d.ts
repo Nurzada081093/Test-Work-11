@@ -41,7 +41,7 @@ export interface IProduct {
   title: string;
   description: string;
   price: number;
-  image: File | string;
+  image: File | string | null;
 }
 
 export interface ICategory {
@@ -64,5 +64,5 @@ export interface IProductForm {
   title: string;
   description: string;
   price: number;
-  image: File | null;
+  image: string | null;
 }

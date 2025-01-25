@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Grid2";
 import { Button, TextField } from "@mui/material";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 interface Props {
   name: string;
@@ -40,7 +40,6 @@ const FileInput: React.FC<Props> = ({ name, label, onGetFile }) => {
       <Grid container spacing={2} direction="row" alignItems="center">
         <Grid>
           <TextField
-            required
             disabled
             label={label}
             value={fileName}

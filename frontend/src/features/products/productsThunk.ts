@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosRequest from '../../axiosRequest.ts';
-import { GlobalError, IProduct, IProductMutation } from '../../types';
+import { GlobalError, IProduct, IProductForm, IProductMutation } from '../../types';
 import { isAxiosError } from 'axios';
 
 export const getAllProducts= createAsyncThunk<IProduct[], void>(
@@ -42,17 +42,17 @@ export const deleteProduct = createAsyncThunk<void, {id: string, token: string }
   }
 );
 
-export const createProduct = createAsyncThunk<void, { product: IProduct, token: string }>(
+export const createProduct = createAsyncThunk<void, { product: IProductForm, token: string }>(
   'products/createProduct',
   async ({product, token}) => {
     const formData = new FormData();
-    const keys = Object.keys(product) as (keyof IProduct)[];
+    const keys = Object.keys(product) as (keyof IProductForm)[];
 
     keys.forEach((key) => {
       const value = product[key];
 
       if (value !== null) {
-        formData.append(key, String(value));
+        formData.append(key, value);
       }
     });
     await axiosRequest.post('/products', formData, {headers: {'Authorization': token}});
