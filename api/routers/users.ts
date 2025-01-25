@@ -6,12 +6,14 @@ import auth, {RequestWithUser} from "../middleware/auth";
 const userRouter = express.Router();
 
 userRouter.post("/register", async (req, res, next) => {
-    const {username, password} = req.body;
+    const {username, password, displayName, phoneNumber} = req.body;
 
     try {
         const user = new User({
             username,
             password,
+            displayName,
+            phoneNumber
         });
 
         user.generateUserToken();

@@ -36,6 +36,23 @@ const UserSchema = new Schema<HydratedDocument<UserData>, UserModel, UserMethods
         type: String,
         required: [true, 'Token is required'],
     },
+    displayName: {
+        type: String,
+        required: [true, 'Token is required'],
+    },
+    phoneNumber: {
+        type: String,
+        required: [true, 'Phone number is required'],
+        unique: true,
+        validate: {
+            validator: async function (this:HydratedDocument<UserData> , value: string): Promise<boolean> {
+                if (!this.isModified('phoneNumber')) return true;
+                const user: UserData | null = await User.findOne({phoneNumber: value});
+                return !user;
+            },
+            message: 'This phone number is already in taken!',
+        },
+    }
 });
 
 UserSchema.pre("save", async function (next) {
